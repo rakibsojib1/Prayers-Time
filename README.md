@@ -1,6 +1,6 @@
-# romadanclander
+# Prayers Time 
 
-A new Flutter project.
+A simple Flutter app to get the Prayers Time in selected Location.
 
 ## Getting Started
 
