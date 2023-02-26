@@ -11,9 +11,9 @@ class LocationSelectionPage extends StatefulWidget {
 }
 
 class _LocationSelectionPageState extends State<LocationSelectionPage> {
-  late String _selectedDivision = '';
+  late String _selectedDivision ;
   late String _selectedDistrict;
-
+  bool _dataLoaded = false;
   final List<String> _divisions = [
     'Dhaka',
     'Chattogram',
@@ -117,18 +117,26 @@ class _LocationSelectionPageState extends State<LocationSelectionPage> {
   };
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_dataLoaded) {
+      SharedPreferences.getInstance().then((prefs) {
+        _selectedDivision =
+            prefs.getString('selectedDivision') ?? _divisions.first;
+        _selectedDistrict = prefs.getString('selectedDistrict') ??
+            _districts[_selectedDivision]!.first;
+        setState(() {
+          _dataLoaded = true;
+        });
+      });
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
-    if (_selectedDivision != '') {
-      SharedPreferences.getInstance().then((prefs) {
-        _selectedDivision = prefs.getString('selectedDivision')!;
-        _selectedDistrict = prefs.getString('selectedDistrict')!;
-        setState(() {});
-      });
-    } else {
-      _selectedDivision = _divisions.first;
-      _selectedDistrict = _districts[_selectedDivision]!.first;
-    }
+    _selectedDivision = _divisions.first;
+    _selectedDistrict = _districts[_selectedDivision]!.first;
   }
 
   @override
